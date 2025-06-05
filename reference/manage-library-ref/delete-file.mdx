@@ -1,0 +1,44 @@
+---
+title : "Delete File"
+description : "Delete the specified file from the library."
+api: DELETE https://api.ai21.com/studio/v1/library/files/{file_id}
+contentType: application/json
+---
+
+**Restrictions**:
+Files in `PROCESSING` status cannot be deleted. Attempts to delete such files will result in a 422 error.
+
+<RequestExample>
+```python Python REST
+import requests
+
+url = "https://api.ai21.com/studio/v1/library/files/{file_id}"
+headers = {"Authorization": "Bearer API_KEY"}
+
+requests.delete(url, headers=headers)
+```
+
+```javascript Node.js
+import fetch from 'node-fetch';
+
+const url = "https://api.ai21.com/studio/v1/library/files/DOCUMENT_ID";
+const headers = {"Authorization": "Bearer API_KEY"};
+
+fetch(url, {
+  method: 'DELETE',
+  headers: headers
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));
+```
+</RequestExample>
+
+## Responses
+
+### Response 200
+Successful deletion. No body content.
+
+### Response 422
+File by this ID does not exist
+

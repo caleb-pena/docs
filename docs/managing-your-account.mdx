@@ -1,0 +1,126 @@
+---
+title: "Account"
+---
+
+# Overview
+
+An account in AI21 grants you access to the playground and API usage. New accounts get a $10 credit to use over the next three months. After that, you must provide billing information, and will be billed for any additional usage at [these rates](/docs/usage-cost). If you expect high usage, you can [contact us for bulk pricing](https://www.ai21.com/meeting/contact).
+
+**Quick facts:**
+
+* An AI21 *account* represents an **organization**. 
+* Each organization can have one or more **members** (sometimes called user accounts) identified by email. Currently AI21 allows a given email address to belong to one organization only.
+* Members have a profile and a **[role](#member-roles)**, which determines what they can see or manage in the account (not what they can use on AI21).
+* To use our API you must have an API key, which is available once you sign in.
+
+## Sign up for AI21
+
+There are two ways to get access to AI21 resources:
+
+* **Join an existing organization account:** An AI21 organization administrator can invite you to join their organization. You'll get an email; follow the link in the email to join that organization. This means all permissions and usage will be managed by, and billed to, that organization. Your account user name is the email address where you received the invitation.
+* **Create an account from scratch:** Visit the [account creation page](https://studio.ai21.com/sign-up) and either provide an email address or sign in using one of the authentication providers listed. Creating a new account this way creates a new organization account in AI21, for which you are the administrator. You can then invite other members, manage the organization's account, change or monitor your billing plan, or perform other administrative functions. You will need to provide billing information when your introductory [usage credits](/docs/usage-cost) expire.
+
+<Info>
+📘 One AI21 user account per email address
+<br/>Currently, AI21 supports only one user account per email address. This means that the same email address cannot belong to multiple organizations in AI21.
+</Info>
+
+## Signing in
+
+Sign in to AI21 using any authentication method supported by AI21 (we support several methods, including SSO, Google, GitHub, and name/password). You must sign in to use the AI21 playground.
+
+If your organization has enabled SSO, they might require you to sign in using SSO. If so, you'll see a warning message if you use any other sign-in method.
+
+## Access your account management center
+
+The account management center shows information about you and your organization. This includes member lists, usage and billing, and payment plans.
+
+There are two ways to reach your account management center:
+
+* **From the web app playground:** Click your profile picture at the top of the playground, then click **My account**.
+* **From the documentation:** Click **Account** at the top of the page
+
+# Billing and usage history
+
+Billing and usage for an organization is the sum of billing and usage of all its members. The default usage plan is pay as you go, but if you have greater usage or support needs you can contact our sales department to design a custom billing plan.
+
+<Accordion title="View or edit your billing or account plan">
+
+Account administrators can see and change their billing plans:
+
+* From the [account management center](#access-your-account-management-center), click **Account > Billing & Plans**
+
+</Accordion>
+
+<Accordion title="View your billing history">
+Account administrators can see the past few bills for their account:
+
+* From the [account management center](#access-your-account-management-center), click **Account > Billing & Plans** to see your bill history.
+
+</Accordion>
+
+<Accordion title="View current usage and charges">
+
+Account administrators can see the usage numbers and costs for the current billing period for their organization:
+
+* From the [account management center](#access-your-account-management-center), click **Account > Model usage** to see your bill history.
+</Accordion>
+
+# Administer your organization’s account
+
+Users are identified by email address. AI21 limits each user to membership in one organization. If you add the same user to multiple organizations, the user will be able to access only the most recent organization they were added to.
+
+You can manage your organization's account from the [account management center](#access-your-account-management-center).
+
+<Accordion title="Manage user roles">
+
+**Users can have one of the following roles:**
+
+* **Member:** Can use the playground and have full API usage.
+* **Admin:** Same as **member**, but can also invite or remove members and manage member roles, see usage and billing for the organization, and change billing plans.
+
+**Administrators can change the role of any other organization member:**
+
+1. From the [account management center](#access-your-account-management-center), click **Organization** to see your organization’s member list.
+2. Click the *more options* icon ( … ) next to the member to manage, then choose the new role to assign.
+
+</Accordion>
+
+<Accordion title="View your member list">
+
+From the [account management center](#access-your-account-management-center), click **Organization** to see your organization’s member list.
+
+</Accordion>
+
+<Accordion title="Add or remove members">
+
+**To invite a new member**
+
+1. From the [account management center](#access-your-account-management-center), Select **Organization** to see your organization’s member list.
+2. Click **Invite member** to invite new members.
+3. When the user has joined, [specify the user's role](#manage-users-role).
+
+**To remove a member**
+
+1. From the [account management center](#access-your-account-management-center), Select **Organization** to see your organization’s member list.
+2. Click the *more* menu <span class="material-symbols-outlined" style={{ verticalAlign: "bottom" }}>more_vert</span> next to the member to remove.
+3. Click **Delete** to remove the member's access. Note that the user might have the ability to navigate some of the playground or management pages for up to an hour, but cannot make changes or access the API.
+
+</Accordion>
+
+<Accordion title="Enable SSO">
+
+AI21 supports SSO for organizations. AI21 supports all major identity providers, including Okta, Google Workspaces, OneLogin, and many more, as well as multi-factor authentication for extra security.
+
+If you are interested in enabling SSO for your company’s AI21 account, please [contact us](https://forms.gle/Si4B1Vd7MAj8n7ZY7).
+
+</Accordion>
+
+<Accordion title="Require SSO to sign in">
+
+If you have SSO enabled for your organization, you can specify whether members *must* use SSO when signing in, or if members can use any supported method to sign in. When you request SSO for your organization, let us know whether SSO should be required.
+
+</Accordion>
+
+
+***

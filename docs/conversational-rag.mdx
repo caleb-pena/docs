@@ -1,0 +1,73 @@
+---
+title: "Conversational RAG"
+description: Build conversational experiences that interact with your organizational documents
+---
+
+## Overview
+
+Conversational RAG allows you to build multi-turn, chat-based experiences that interact with your enterprise documents and data. Built on top of AI21’s advanced RAG Engine and infused with a planning layer, it enables users to ask follow-ups, and receive grounded, context-aware answers.\
+Conversational RAG ensures accurate, high-quality answers that reflect your proprietary knowledge base.
+
+## Key Benefits
+
+**Chat with Your Data**\
+Go beyond one-shot question-answering—enable follow-up questions, clarification loops, and multi-step problem solving via a natural, conversational interface.
+
+**Enterprise-Grade Accuracy**\
+Built on retrieval-augmented generation (RAG), responses are grounded in your actual documents, not just model hallucination. Useful for internal tools and customer-facing applications alike.
+
+**Fully Managed & Easy to Deploy**\
+Simply upload your documents (PDF, DOCX, TXT,HTML or markdown). The RAG Engine automatically indexes them, making setup fast and seamless. Data connectors are coming soon.
+
+**Supported Languages**
+
+RAG queries are supported in the following 8 languages:
+
+* English (default)
+* Spanish
+* French
+* Portuguese
+* Italian
+* Dutch
+* German
+* Hebrew
+
+To receive responses in a different supported language, simply set your preferred language using the language parameter in your API request.
+
+<Info>
+### 💡Note
+
+We only support cases where the query and the documents being retrieved are in the same language.\
+For example, if your query is in French, the relevant documents must also be in French.
+
+</Info>
+
+## Product Details
+
+Conversational RAG is a compound AI system that uses a planning module to assess incoming queries. It chooses whether to:
+
+* respond solely using the **LLM’s,** or
+* route the query to the **RAG Engine** to retrieve grounded context before generating a response.\
+  This hybrid architecture ensures quality, visibility, and flexibility across a range of enterprise applications.
+
+## Input/Output Modalities
+
+**Input**: Designed for multi-turn text conversations that reference your enterprise documents. This is the primary use case that delivers the most value - grounded, contextual responses. While designed for interactive dialogue with your data, the system can still handle other types of inputs (e.g., single-shot queries).
+
+**Output**: Grounded, context-aware responses.
+
+## Deployment & Document Ingestion
+
+* Upload supported document types: .pdf, .docx, .txt, .md,html
+* Indexing is automatic
+* The conversational RAG system includes our in-house document parser, which provides high-quality parsing
+* Coming soon: data connectors to cloud sources
+
+<Tip>
+### Try it out
+
+You can experiment with Conversational RAG directly in our, [Playground](https://studio.ai21.com/v2/workspaces/429d8ce9-0f35-4626-a48c-231d28db34a8/chat) or integrate it using the [API reference](/reference/conversational-rag-api-ref)
+
+</Tip>
+
+***

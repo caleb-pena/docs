@@ -1,0 +1,120 @@
+---
+title : "List Library Files"
+description : "Retrieve a list of documents in the user's library. Optionally specify a filter to find only files with matching labels or paths. This method returns only metadata about files; to download a file, call
+`GET .../files/{file_id}/download`"
+api: GET https://api.ai21.com/studio/v1/library/files
+contentType: application/json
+---
+
+
+When specifying qualifiers with your request, only files that match *all* qualifiers will be returns. So, for example, if you specify `label='financial'` and `status='UPLOADED'`, only files with the label "financial" AND status UPLOADED will be returned.
+
+## Request path parameters
+The following optional parameters can be used to filter your results.
+
+<ParamField body="name" type="string" optional>
+  The full name of the uploaded file, without any path parameters. So: "mydoc.txt", not "/users/benfranklyn/Documents/mydoc.txt". Does not match name substrings, so "doc.txt" does not match "mydoc.txt".
+</ParamField>
+
+<ParamField body="path" type="string" optional>
+  Return only files with a `path` value that is a full match or starts with this string. So specifying "financial/" will match documents with "financial/taxes" but not documents with "money/financial/taxes".
+</ParamField>
+
+<ParamField body="status" type="string" optional>
+  Status of the file in the library. Supported values:
+  - `DB_RECORD_CREATED`
+  - `UPLOADED`
+  - `UPLOAD_FAILED`
+  - `PROCESSED`
+  - `PROCESSING_FAILED`
+</ParamField>
+
+<ParamField body="label" type="array[string]" optional>
+  Return only files with this label. Label matching is case-sensitive, and will not match substrings.
+</ParamField>
+
+<ParamField body="Pagination" type="object" optional>
+  By default, the endpoint returns up to 10000 files. Pagination can be controlled using the following parameters:
+<Expandable>
+  <ParamField body="offset" type="integer" optional>
+    The number of files to skip.
+  </ParamField>
+
+  <ParamField body="limit" type="integer" optional>
+    The number of files to retrieve (maximum 1,000, default 1,000)
+  </ParamField>
+</Expandable>
+</ParamField>
+
+## Responses
+
+### Response 200
+A successful response returns an array of file metadata items.
+<RequestExample>
+```py Python SDK
+import os
+os.environ["AI21_API_KEY"] = <YOUR_API_KEY>
+
+client = AI21Client()
+def get_files():
+    # Just return the first 10 files
+    response = client.library.files.list(
+        offset=0,
+        limit=10,
+        status="PROCESSED" # Apply 
+    )
+    print(response)
+
+## Response
+[
+  {
+    file_id='44fwe3-ce35-4b6b-8e03-631151eae23b',
+    name='schnauzers.md',
+    file_type='text/markdown',
+    size_bytes=6986,
+    created_by='750592e4-faa5-4944-8781-7c51e596699b',
+    creation_date='2024-06-10',
+    last_updated='2024-06-10',
+    status='PROCESSED',
+    path='dogs/schnauzers',
+    labels=['mobile','other'],
+    public_url='https://example.com/petstore/schnauzers',
+    error_code=None,
+    error_message=None
+  },
+   ...
+]
+```
+```py Python REST
+ROOT_URL = "https://api.ai21.com/studio/v1/"
+
+def list_files():
+  url = ROOT_URL + "library/files"
+  params = {
+    "offset": 0,  # Optional: Adjust as needed
+    "limit": 100,  # Optional: Adjust as needed
+    "status": "PROCESSED"
+   }
+  response = requests.get(
+    url=url,
+    headers={"Authorization": f"Bearer {AI21_API_KEY}"},
+    params=params
+  )
+  print(response.text)
+```
+```js Node.js
+import fetch from 'node-fetch';
+
+const url = "https://api.ai21.com/studio/v1/library/files";
+const API_KEY = "your-api-key"; // replace with your API key
+
+fetch(url, {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${API_KEY}`,
+  }
+}).then(res => res.json())
+  .then(json => console.log(json))
+  .catch(err => console.error('error:' + err));
+```
+</RequestExample>

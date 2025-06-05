@@ -1,0 +1,286 @@
+---
+title: "RAG Engine Overview"
+description: Get answers from your documents
+---
+
+AI21's RAG Engine offers enterprises an all-in-one solution for implementing Retrieval-Augmented Generation. You can upload your documents (PDF, DOCX, HTML, or TXT) to your document library, then use the RAG engine to query those documents in natural language. The answer will be generated solely from the contents of those documents; if the information is not included in those documents, the RAG engine will say so. The base model is used solely for generating natural language text.
+
+## Links
+
+* **[Playground:](https://studio.ai21.com/rag-engine)** Try it in the browser, with all the API parameters.
+
+* **API documentation:** Learn how to use our RAG Engine APIs:
+
+  * [Contextual Answers using the RAG Engine](/v4.1/reference/contextual-answers-document-library-ref)
+  * [Manage your document library](/reference/manage-library-ref)
+
+## Library specifics
+
+To see details such as supported file formats and max file sizes, see the [file upload reference](/reference/manage-library-ref#upload-file).
+
+### Features
+
+* **Seamless integration between retrieval and generation:** RAG Engine automatically integrates with many of our task-specific models, so you can surface search results or provide a grounded answer to a query based on your organizational data – all within a single API call. You can also connect RAG Engine with a foundation model like Jurassic – and use Semantic Search results within a prompt.
+* **Support for several file formats:** The RAG Engine supports several different file types including PDF. The parser understands complex layouts, including tables.
+* **Built-in data source integration:** You can integrate your organization’s data sources, such as Google Drive, Amazon S3, and others, to automatically sync documents with RAG Engine. To enable data source integration, [contact us](mailto:sales@ai21.com).
+* **Secure and appropriate access to documents:** The RAG Engine adheres to organizational user and group permissions with a comprehensive approach that addresses the intricate needs of document management in modern, data-intensive environments.
+
+### Current limitations
+
+* OCR functionality is not available at this time. Only PDF documents that contain a text layer are supported.
+* Some PDFs may take longer to process, depending on their content.
+
+## How the RAG engine works
+
+The RAG Engine comprises the following parts, each of which can be called individually:
+
+* **A[document library manager](/reference/manage-library-ref):** Upload files into the library and parse the content into text and content. The library can read several different formats, including PDFs, and can understand complex structures such as tables.
+
+The RAG engine works in three basic stages:
+
+1. **Indexing:** When a document is uploaded, the engine parses it into segments by topic. Adjacent sections of the doc that are about the same topic are considered to be the same segment (up until a maximum size). Each segment has an *embedding value* that expresses the meaning of the segment in numerical form. The engine stores a list of segments and their embedding values.
+
+   * **Pro tips**: A document is actually segmented and rated in two different ways: using *sparse* evaluation, which is a simple list of keywords in the segment, and *dense* evaluation, which is a vector of 1024 values that give a more complex evaluation of what the segment is about (monkeys, pets, care and feeding, etc) as calculated by the embedding engine.
+
+2. **Retrieval**: The engine extracts the user's question, calculates an embedding value for it that represents the meaning of the question, then looks through the index for segments that seem to be about the same topic. Matching segments are put into a candidate pool for the next step.
+
+   * **Pro tip:** There is a *similarity threshold* between the user's question and the segment. The retrieval engine looks for segments within this threshold.
+
+3. **Question answering:** All segments in the candidate pool are combined into a prompt, along with the question, and sent to an LLM to generate an answer. (The prompt is basically, "here is some information and a question; generate an answer to the question using only the information given here; if you don't know the answer, say 'I don't know'")
+
+## Using the RAG engine
+
+### Step 1: Upload your files
+
+Upload your files (PDF, DOCX, HTML, and TXT) to the RAG Engine, where each account gets free storage up to 1 GB. (Want more? Contact us: [sales@ai21.com](mailto:sales@ai21.com))
+
+You can also integrate your organization’s data sources, such as Google Drive, Amazon S3, and others, to automatically sync documents with RAG Engine. To enable data source integration, [contact us](mailto:sales@ai21.com)
+
+<Tip>
+### Tip
+
+To upload, list, delete, and update your library, you can use either [these API endpoints](/reference/manage-library-ref) or use the [AI21 playground web app](https://studio.ai21.com/rag-engine).
+
+</Tip>
+
+In this example, we will upload three documents to the library. We show examples for both the Python SDK and direct HTTP REST request:
+
+<CodeGroup>
+
+```python Python SDK
+from ai21 import AI21Client
+
+client = AI21Client(
+    # This is the default and can be omitted
+    api_key=os.environ.get("AI21_API_KEY"),
+)
+
+def upload_rag_file(path, labels=None, path_meta=None, url=None):
+    file_id = client.library.files.create(
+        file_path=path,
+        labels=labels,
+        path=path_meta,
+        public_url=url
+    )
+    print(file_id)
+
+# Note that each file name (ignoring the path) must be unique.
+# path and label parameters are used for filtering, as described below.
+upload_rag_file("/Users/dafna/uk_employee_policy.pdf",
+        path_meta='hr/UK',labels=['hr', 'policy'])
+upload_rag_file("/Users/dafna/us_employee_policy.md",
+        path_meta='hr/US', labels=['hr', 'policy'])
+upload_rag_file("/Users/dafna/it_security.html",
+        labels=['security'])
+```
+
+
+```python Python REST
+import requests
+ROOT_URL = "https://api.ai21.com/studio/v1/"
+
+
+def upload_library_file(file_path, path=None, labels=None, publicUrl=None):
+  url = ROOT_URL + "library/files"
+  file = {"file":open(file_path, "rb")}
+  data = {
+    "path": path,
+    "labels": labels,
+    "publicUrl": publicUrl
+  }
+  response = requests.post(
+    url=url,
+    headers={"Authorization": f"Bearer {AI21_API_KEY}"},
+    data=data,
+    files=file
+  )
+  print(f"FileID: {response.json()['id']}")
+  
+  # Apply label "hr" and path "/hr/UK" to allow filtering, described below.
+  upload_library_file("/Users/dafna/Documents/employee_handbook_uk.txt",
+                  path="/hr/UK", labels=["hr"])
+```
+
+</CodeGroup>
+
+#### Labeling and filtering requests
+
+**File labels**
+
+You can apply zero or more arbitrary text labels to each file, and later limit your list, get, search, and query requests to files matching specific labels.
+
+**File paths**
+
+Similarly, you can assign an optional, arbitrary path-like label to each file. This path-style label enables a hierarchical labeling system. For example, you might assign the path `financial/USA` to some files, `financial/UK` to other files, and then limit your query to `financial/USA` to get US financial info, `financial/UK` to get UK financial info, or `financial/` to get all financial information. Path matching is simple prefix matching, and doesn't enforce or verify the path syntax.
+
+This can help you organize your filing system, while focusing your questions on a subset of documents.
+
+### Step 2: Ask a question
+
+Once you have documents in your library, you can ask questions based on document content and get an answer in natural language.
+
+The RAG Engine searches through the document library, filtering documents by any filtering parameters that you provide, looking for relevant content. When it finds relevant content, it ingests it and then generates an answer, along with a list of sources from the library used to generate the answer.
+
+<Tip>
+### Tip
+
+To query files in code, use [this endpoint](/v4.1/reference/contextual-answers-document-library-ref). To query your library in your browser use [the RAG Engine playground](https://studio.ai21.com/rag-engine) and select **Ask your documents**.
+
+</Tip>
+
+Let's ask a question about working from home:
+
+<CodeGroup>
+
+```python Python SDK
+client = AI21Client()
+
+def query_library(query, labels=None, path=None):
+    response = client.library.answer.create(
+        question=query,
+        path=path,
+        labels=labels
+    )
+    print(response.answer)
+
+# Filter the question to documents with the case-sensitive label "hr"
+query_library("How many days can I work from home in the US?",labels=["hr"])
+```
+
+
+```python Python REST
+def query_library(question, labels=None, path=None, fileIds=None):
+  url = ROOT_URL + "library/answer"
+  data = {
+    "question": question ,
+     "labels":labels,
+     "path": path,
+     "fileIds": fileIds
+  }
+  print(data)
+  response = requests.post(
+    url=url,
+    headers={"Authorization": f"Bearer {AI21_API_KEY}"},
+    json=data
+  )
+
+  response_json = response.json()
+  if response_json["answerInContext"]:
+    print("Answer: ", response.json()["answer"])
+    print("Sources", response.json()["sources"])
+  else:
+    print("Answer not found")
+
+# Filter the question to documents with the case-sensitive label "hr"
+query_library(question="How many days can I work from home in the US?",labels=["hr"])
+```
+
+</CodeGroup>
+
+The response is:
+
+<CodeGroup>
+
+```javascript Short answer
+"In the US, employees can work from home up to two days per week."
+```
+
+
+```json Full response JSON
+{
+  "id":"709f5db4-5834-ed03-c161-ebef2f2a2543",
+  "answerInContext":true,
+  "answer":"In the US, employees can work from home up to two days per week.",
+  "sources":[
+    {
+      "fileId":"5143f17d-626d-4a1f-8e66-a4e7e129d238",
+      "name":"hr/US/employee_handbook_us.txt",
+      "highlights":[
+        "US employees can work from home up to two days per week."
+      ],
+      "publicUrl":null
+    },
+    {
+      "fileId":"d195f8a9-a8fe-4f4e-96fb-342246d55f53",
+      "name":"/hr/UK/employee_handbook_uk.txt",
+      "highlights":[
+        "UK employees can work from home up to two days per week."
+      ],
+      "publicUrl":null
+    }
+  ]
+}
+```
+
+</CodeGroup>
+
+Note that the full response returned from the model contains the sources used to generate the answer (see the `sources` field).
+
+**If there is no answer**
+
+If the answer to the question is not in any of the documents, the response will have `answer_in_context` set to `False` and an assistant message saying "Answer not in document."
+
+<CodeGroup>
+
+```plain Python SDK
+xxx
+```
+
+</CodeGroup>
+
+
+
+You can do a quick text to see whether your answer was in the document by checking `answer_in_context`:
+
+<CodeGroup>
+
+```csharp Python SDK
+if response.answer_in_context:
+    # Do something
+else:
+    # Do something else
+```
+
+</CodeGroup>
+
+### Improving your results
+
+#### Working with PDFs
+
+When analyzing PDFs, the recommended approach is to use AI21's native PDF support. If you are using a custom parser, ensure that your parser is accurately parsing tables and other information, as Contextual Answers can be sensitive to incorrectly parsed input data. Note that, Contextual Answers also supports .docx, .html and standard .txt files.
+
+When analyzing tables, we recommend passing the table contents as JSONL, where each row has the key (i.e. column name) and the value (i.e. the corresponding row entry). Note that for smaller tables, or for tables embedded within a larger text, this step frequently can be skipped, as Contextual Answers will generally be able to surface answers from the raw table.
+
+#### Benchmarking your answers
+
+When evaluating Contextual Answers (as when evaluating any model) the evaluation process is crucial for assessing the performance. Follow these general steps to refine your evaluation methods:
+
+**Create a Test Set**: Begin with 10 or more questions, each with their own contexts and "golden answers." This helps in establishing a baseline for measuring improvements. We recommend having a diverse set of question types.
+
+**Ensure Accuracy of your Test Set**: Verify that the gold answers are correct and indeed contained within the given context. While you can use answers that are sourced from other large language models, it is essential to ensure that the responses are actually accurate and correct and are contained within the context.
+
+**Comprehensive Evaluation**: Evaluate not only the True Positive instances (correct answers) but also consider True Negative instances (correctly identified as "Answer not in doc"). This ensures a balanced evaluation of the model.
+
+**Evaluation Correctness of the response**: Evaluation can be done either manually or automatically (for example, by using an LLM). However, if an LLM is used, care should be taken to avoid biases in evaluation, since LLMs generally prefer responses an LLM of a similar type. It is recommended that human evaluation be used either entirely or at least to evaluate the LLM classification of correctness of the Contextual Answers response.
+
+***

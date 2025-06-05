@@ -1,0 +1,82 @@
+---
+title : "Update File"
+description : "Update the specified parameters of a specific document in the user's library. This operation currently supports updating the publicUrl and labels parameters."
+api: PUT https://api.ai21.com/studio/v1/library/files/{file_id}
+contentType: application/json
+---
+## Request body
+
+<ParamField body="publicUrl" type="string" optional>
+The updated public URL of the document.
+</ParamField>
+
+<ParamField body="labels" type="array of strings" optional>
+The updated labels associated with the file. Separate multiple labels with commas.
+</ParamField>
+
+<RequestExample>
+```py Python SDK
+import os
+os.environ["AI21_API_KEY"] = <YOUR_API_KEY>
+
+from ai21 import AI21Client
+from ai21 import errors as ai21_errors
+from ai21 import AI21APIError
+
+client = AI21Client()
+def update_file_metadata(file_id):
+    try:
+        response = client.library.files.update(
+            file_id=file_id,
+            labels=["reptiles","boring"], # Replaces, not adds to, existing labels
+            public_url="https://example.com/petstore/iguanas"
+        )
+    except ai21_errors.AI21ServerError as e:
+        print("Error: server could not be reached")
+        print(e.details)
+    except ai21_errors.TooManyRequestsError as e:
+        print("A 429 status code was returned. Slow down on the requests")
+    except AI21APIError as e:
+        print(f"Another error: {e} {e.status_code} For more error types see ai21.errors")
+    else:
+        print("File updated")
+```
+```py Python REST
+import requests
+
+url = "https://api.ai21.com/studio/v1/library/files/{file_id}"
+headers = {"Authorization": f"Bearer API_KEY"}
+data = {
+    "labels": ["Label A", "Label B", "New Label C", "New Label D"], 
+    "publicUrl": "www.updated-url.com"
+}
+
+requests.put(url, headers=headers, json=data)
+```
+```js Node.js
+import fetch from 'node-fetch';
+
+const DOCUMENT_ID = "your-document-id"; // replace with your document id
+const API_KEY = "your-api-key"; // replace with your API key
+const url = `https://api.ai21.com/studio/v1/library/files/${DOCUMENT_ID}`;
+
+let data = {
+  "labels": ["Label A", "Label B", "New Label C", "New Label D"],
+  "public_url": "www.updated-url.com"
+};
+
+fetch(url, {
+  method: 'PUT',
+  headers: {
+    'Authorization': `Bearer ${API_KEY}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(data)
+}).then(res => res.json())
+  .then(json => console.log(json))
+  .catch(err => console.error('error:' + err));
+```
+</RequestExample>
+## Responses
+
+If the update is successful, the server will return an HTTP status code 200 with no body content. If the document ID does not exist, a 422 error message will be returned.

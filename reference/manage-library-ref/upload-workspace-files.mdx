@@ -1,0 +1,142 @@
+---
+title : "Upload Workspace Files"
+description : "Upload files to use . You can assign metadata to your files to limit searches to specific files by file metadata. There is no bulk upload method; files must be loaded one at a time."
+api: POST https://api.ai21.com/studio/v1/library/files
+contentType: application/json
+---
+
+- **Max number of files:** No limit. The playground limits bulk uploads to 50 files per request.
+- **Max total library size:** 1 GB
+- **Max file size:** 5 MB
+- **Supported file types:** PDF, DocX, HTML, TXT
+
+
+## Request body fields
+
+<ParamField body="file" type="string" required>
+  Raw file bytes. Every uploaded file must have a unique file name, not including the local file path. Specifying file + path or file + labels will find only files with *both* the specified name and path/label. **SDK NOTE** In the SDK this parameter is replaced with `file_path`, which is the local string path and name of the file, not the file bytes.
+</ParamField>
+
+<ParamField body="path" type="string" optional>
+  An arbitrary file-path-like string that indicates the content of the file. Can be used to limit the scope of files in a query or search request. See above for more details about paths. Paths are case-sensitive. Specifying path + file or path + labels will return only files with both the specified path and name/label.
+</ParamField>
+
+<ParamField body="labels" type="array of strings" optional>
+  Arbitrary string labels that describe the contents of this file. Labels are case-sensitive. Specifying labels + path or labels + name will return only files with both any of the specified labels and the specified name/path.
+</ParamField>
+
+<ParamField body="publicUrl" type="string" optional>
+  A public URL associated with the file, if any. Only used as metadata, to indicate the location of the source file. For example, if implementing a search engine against a website, specifying a URL for each uploaded file is a simple way to present the link to the file in the search results presented to the user. (Tip: You can also provide a file path or any arbitrary string: URL validity is not checked.)
+</ParamField>
+
+<RequestExample>
+```py Python SDK
+client = AI21Client(api_key=AI21_API_KEY)
+
+def upload_rag(path, labels, path_meta):
+    response = client.library.files.create(
+        file_path=path,
+        labels=labels,
+        path=path_meta
+    )
+    print(response)
+
+```
+```py Python REST
+import requests
+ROOT_URL = "https://api.ai21.com/studio/v1/"
+
+
+def upload_library_file(file_path, path=None, labels=None, publicUrl=None):
+  url = ROOT_URL + "library/files"
+  file = {"file":open(file_path, "rb")}
+  data = {
+    "path": path,
+    "labels": labels,
+    "publicUrl": publicUrl
+  }
+  response = requests.post(
+    url=url,
+    headers={"Authorization": f"Bearer {AI21_API_KEY}"},
+    data=data,
+    files=file
+  )
+  print(f"FileID: {response.json()['id']}")
+  
+upload_library_file("/Users/dafna/Documents/employee_handbook_uk.txt",
+                  path="/hr/UK", labels=['hr'])
+```
+```js Node.js
+import fetch from 'node-fetch';
+import fs from 'fs';
+import FormData from 'form-data';
+
+const url = "https://api.ai21.com/studio/v1/library/files";
+const API_KEY = "your-api-key"; // replace with your API key
+
+const file = fs.createReadStream("/Users/user/Desktop/folder/koala.txt");
+const formData = new FormData();
+
+formData.append('file', file);
+formData.append('path', 'desktop/folder');
+formData.append('labels', JSON.stringify(["cuties", "furry_animals"]));
+formData.append('publicUrl', 'https://en.wikipedia.org/wiki/Koala');
+
+fetch(url, {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${API_KEY}`,
+  },
+  body: formData
+}).then(res => res.json())
+  .then(json => console.log(json))
+  .catch(err => console.error('error:' + err));
+
+```
+</RequestExample>
+
+## Responses
+
+### Response 200
+A unique identifier for the uploaded file. Use this later to request, modify, or delete the file. You don't need to store the value though, as it is returned along with all file information in a GET /files request. **Type:** UUID. Example: da13301a-14e4-4487-aa2f-cc6048e73cdc // file-uuid
+
+### Error: Unsupported document type 422
+Error message:
+
+```json
+{
+    "detail": "Invalid file type: image/png. Supported file types are: text/plain, text/html, application/docx, application/pdf"
+}
+```
+
+### Error: Same file name, same path 422
+Error message:
+
+```json
+{
+  "detail": "File: {fileName} already exists",
+  "suggestion": "To override the file content, delete it first using the DELETE endpoint"
+}
+```
+
+<ResponseExample>
+```json 200
+{
+  "id": "da13301a-14e4-4487-aa2f-cc6048e73cdc",
+}
+```
+
+```json 422 Unsupported document type
+{
+  "detail": "Invalid file type: image/png. Supported file types are: text/plain, text/html, application/docx, application/pdf"
+}
+```
+
+```json 422 Same file name, same path
+{
+  "detail": "File: {fileName} already exists",
+  "suggestion": "To override the file content, delete it first using the DELETE endpoint"
+}
+```
+
+</ResponseExample>

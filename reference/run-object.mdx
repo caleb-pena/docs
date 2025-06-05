@@ -1,0 +1,87 @@
+---
+title: "Run object"
+---
+
+## Run Object
+
+<ParamField body="id" type="string">
+  ID of the task that a user can use for polling it's status
+</ParamField>
+
+<ParamField body="result" type="object or null">
+</ParamField>
+
+<ParamField body="status" type="string">
+  any of <code>completed</code>, <code>failed</code>, <code>in_progress</code>
+</ParamField>
+
+<ParamField body="requirements_result" type="array[object]">
+  Detailed results for each requirement.
+
+  <Expandable title="more">
+    <ParamField body="score" type="float or null">
+      A value between 0 and 1 indicating how well the requirement was fulfilled.
+    </ParamField>
+    <ParamField body="finish_reason" type="string or null">
+      A textual reason what happened - one of <code>Perfect score</code> | <code>Budget exhausted</code>
+    </ParamField>
+    <ParamField body="requirements" type="array[object]">
+      A list of search requirement shown in the report.
+
+      <Expandable title="more">
+        <ParamField body="name" type="string or null">
+          The name provided (or default name) of the requirement requested to be fulfilled
+        </ParamField>
+        <ParamField body="description" type="string or null">
+          When a user provides the requirement explicitly, it's what the user provided
+        </ParamField>
+        <ParamField body="score" type="float or null">
+          A value between 0 and 1 indicating how well the requirement was fulfilled.
+        </ParamField>
+        <ParamField body="reason" type="string or null">
+          A textual reason about why the requirement didn't reach a perfect score
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="data_sources" type="object">
+  Specifies the data sources used to retrieve contextual information for a run. Contains optional web_search and file_search results.
+
+  <Expandable title="more">
+    <ParamField body="web_search" type="array[object]">
+      A list of search web retrieved from web search.
+
+      <Expandable title="more">
+        <ParamField body="url" type="string">
+          The URL of the search result.
+        </ParamField>
+        <ParamField body="text" type="string">
+          The snippet or content returned from the search.
+        </ParamField>
+        <ParamField body="score" type="float">
+          The relevance score of the result.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField body="file_search" type="array[object]">
+      A list of search web retrieved from user-uploaded files.
+
+      <Expandable title="more">
+        <ParamField body="file_name" type="string">
+          The name of the file where the result was found.
+        </ParamField>
+        <ParamField body="text" type="string or null">
+          The text snippet retrieved from the file.
+        </ParamField>
+        <ParamField body="score" type="float">
+          The relevance score of the result.
+        </ParamField>
+        <ParamField body="order" type="integer">
+          The order in which the result appears in the file.
+        </ParamField>
+      </Expandable>
+    </ParamField>
+  </Expandable>
+</ParamField>

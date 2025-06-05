@@ -1,0 +1,99 @@
+---
+title: "Self Deployment Guide"
+---
+
+This guide provides detailed instructions on how to self-deploy the Jamba Mini and Jamba Large models.
+
+## Self-Deployment Options
+
+## Option 1: Direct Download from HuggingFace
+
+1. Download [base docker image](https://hub.docker.com/layers/vllm/vllm-openai/v0.6.5/images/sha256-42f117dffe16e978f9567084e5cda18f85fdcfbc18568536a1208a69419c77cf).
+
+2. Download the model weights and the tokenizer from HuggingFace:
+
+   * [Jamba 1.6 Mini](https://huggingface.co/ai21labs/AI21-Jamba-Mini-1.6)
+   * [Jamba 1.6 Large](https://huggingface.co/ai21labs/AI21-Jamba-Large-1.6)
+
+## Option 2: Using a Specific Platform
+
+* For platforms like SageMaker, we provide tailored guides. You can find the SageMaker guide [here](https://docs.aws.amazon.com/sagemaker/latest/dg/large-model-inference-container-docs.html).
+
+## Option 3: Running vLLM docker (On-Premises)
+
+We recommend using vLLM version `v0.6.5` to `v0.7.3`.
+
+NVIDIA Stack
+
+* NVIDIA Driver Version: 535.x.y
+* CUDA 12.1
+
+While earlier versions may be compatible, they have not been tested and may result in less optimized performance or lack support for certain features.
+
+When deploying an LLM, you need the following components:
+
+1. **Hardware (Compute)**:
+
+**Jamba Mini**
+
+With the default BF16 precision on 2 80GB A100 GPUs and default vLLM configuration, you'll be able to perform inference on prompts up to 200K tokens long. On more than 2 80GB GPUs, you can easily fit the full 256K context.
+
+Note: vLLM's main branch has some memory utilization improvements specific to the Jamba architecture that allow using the full 256K context length on 2 80 GPUs.
+
+**Jamba Large**
+
+Jamba Large 1.6 is too large to be loaded in full (FP32) or half (FP16/BF16) precision on a single node of 8 80GB GPUs. Therefore, quantization is required. We've developed an innovative and efficient quantization technique, [ExpertsInt8](https://github.com/vllm-project/vllm/pull/7415), designed for MoE models deployed in vLLM, including Jamba models. Using it, you'll be able to deploy Jamba Large 1.6 on a single node of 8 80GB GPUs.
+
+2. **Runtime Environment (Execution Environment)** This includes the OS, Frameworks, libraries and any dependencies required for the model to function. See this [docker](https://hub.docker.com/layers/vllm/vllm-openai/v0.6.1.post2/images/sha256-d6e918d8421dc0b3317a9c7575cdcaa6b545048503688cd9b60f5bcc91a4e028?context=explore). We support the latest version of vLLM.
+
+3. **Prepare host environment for VLLM deployment** Pull the Docker image and prepare a working directory.
+
+4. **Download the model directly from Hugging Face** Jamba Large: [https://huggingface.co/ai21labs/AI21-Jamba-Large-1.6/edit/main/README.md](https://huggingface.co/ai21labs/AI21-Jamba-Large-1.6/edit/main/README.md) Jamba Mini: [https://huggingface.co/ai21labs/AI21-Jamba-Mini-](https://huggingface.co/ai21labs/AI21-Jamba-Mini-1.6/edit/refs%2Fpr%2F1/README.md)
+
+5. **Run vLLM docker container in ‘offline’ mode**
+
+* Set OFFLINE mode
+* Map local model directory to the container path ‘/mnt/model/’
+* Set quantization to ‘experts\_int8’ for better throughput and usage in smaller instances
+* Use the container model path as the name of the model:
+
+<CodeGroup>
+
+```ruby Shell
+docker run --gpus all  
+-v /root/models/my-local-model-dir/:/mnt/model/  
+-p 8000:8000  
+--env "TRANSFORMERS_OFFLINE=1"  
+--env "HF_DATASET_OFFLINE=1"  
+--quantization="experts_int8"  
+--ipc=host vllm/vllm-openai:latest  
+--model="/mnt/model/"
+```
+
+</CodeGroup>
+
+6. **Call API with model name set to**
+
+<CodeGroup>
+
+```swift Shell
+curl -X POST "http://localhost:8000/v1/chat/completions"  
+-H "Content-Type: application/json"  
+--data '{  
+	"model": "/mnt/model/",  
+	"messages": [  
+		{"role": "user", "content": "Hello!"}  
+	]  
+}'
+```
+
+</CodeGroup>
+
+## References
+
+* [AI21 Jamba Mini on HuggingFace](https://huggingface.co/ai21labs/AI21-Jamba-Mini-1.6/edit/refs%2Fpr%2F1/README.md)
+* [AI21 Jamba Large on HuggingFace](https://huggingface.co/ai21labs/AI21-Jamba-Large-1.6/edit/main/README.md)
+* [vLLM](https://docs.vllm.ai/en/latest/index.html)
+* [vLLM docker image layers details](https://hub.docker.com/layers/vllm/vllm-openai/v0.6.1.post2/images/sha256-d6e918d8421dc0b3317a9c7575cdcaa6b545048503688cd9b60f5bcc91a4e028?context=explore)
+
+***

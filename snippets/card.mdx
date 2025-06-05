@@ -1,0 +1,34 @@
+export const IntroCard = ({ icon, title, href }) => {
+  return (
+    <a
+      href={href}
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "6px",
+        padding: "10px 16px",
+        borderRadius: "24px",
+        backgroundColor: "transparent",
+        textDecoration: "none",
+        height: "44px",
+        width: "fit-content",
+        border: "1px solid #212121",
+      }}
+      className="intro-card border hover:!border-primary dark:hover:!border-primary-light transition-colors"
+    >
+      <Icon
+        icon={icon}
+        color="#212121"
+        className="w-[18px] h-[18px] text-[#52525c] dark:text-white"
+      />
+      <span
+        style={{ fontSize: "16px", fontWeight: 600, lineHeight: 1 }}
+        className="text-[#212121] dark:text-primary"
+      >
+        {title}
+      </span>
+    </a>
+  );
+};
+

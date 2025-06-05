@@ -1,0 +1,25 @@
+---
+title: "Rate Limits"
+---
+
+Rate limits serve as essential mechanisms to control the flow of requests made to a system, ensuring its stability and fair usage. Rate limits restrict the number of requests that can be made within a specific time frame. Rate limits are commonly measured by **RPM** (requests per minute) or **RPS** (requests per second), indicating the maximum allowed number of requests a user or application can make during that time.
+
+Below are the rate limits for all of our models when accessed on the AI21 Platform via our SDK or REST endpoints. If you require a higher limit for your particular use case, please don't hesitate to get in touch with us at [sales@ai21.com](mailto:sales@ai21.com).
+
+<Note>
+### Cloud-based services
+
+Cloud providers have their own rate limits. For instance, Amazon SageMaker rate limits are determined by the instance that you deploy to hold the model. Amazon Bedrock has their own pricing and rate limits for AI21 model usage. See your cloud provider's documentation for details.
+
+</Note>
+
+## Foundation models
+
+Foundation models have usage limits per second (RPS) and per minute (RPM):
+
+| Foundation Model | RPS | RPM |
+| ---------------- | --- | --- |
+| Jamba Large      | 10  | 200 |
+| Jamba Mini       | 10  | 200 |
+
+***

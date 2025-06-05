@@ -1,0 +1,12 @@
+---
+title: "Training Data"
+description: "The model training dataset is composed of text posted or uploaded to the internet. The internet data that it has been trained on includes a filtered and curated version of the CommonCrawl dataset, Wikipedia the BookCorpus dataset and arxiv/stackexchange."
+---
+
+In the pretraining process, we excluded sites with robot files indicating the presence of copyright material and/or PII. All training data was filtered using our toxicity, safety and similarity detection technology and processes to improve the safety, accuracy and reliability of the output of the model.
+
+The creation of a training dataset can be viewed as a pipeline consisting of selection, curation, filtering, augmentation and ingestion. This process is iterative and involves both human and machine evaluation in each phase of the pipeline. Employees of AI21 are involved in every phase and third-party organizations are used in the filtering and augmentation phases of the data pipeline and in later testing (e.g. red-teaming) to provide external review and validation. Due diligence has been performed on the business practices of these third-party organizations including locations, wages, working conditions and protections.
+
+Customers of AI21 and government agencies can request additional details about these organizations, their operations and the roles they play and the instructions given to them. Considering the training data used by the model, it follows that its outputs can be interpreted as being representative of internet-connected populations. Most of the internet-connected population is from industrialized countries, wealthy, younger, and male, and is predominantly based in the United States. This means that less-connected, non-English-speaking and poorer populations are less represented in the outputs of the system.
+
+Customers can compensate for some of these limitations by adding training data of their own, but the underlying language model inherently contains bias based on its pre-training data.

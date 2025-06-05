@@ -1,0 +1,17 @@
+---
+title: Retrieve run status
+description: "Retrieves the status of the run execution based on its ID.
+The status can be `completed`, `failed`, or `in_progress`."
+api: GET https://api.ai21.com/studio/v1/maestro/runs/{run_id}
+contentType: application/json
+---
+
+## Path parameters
+
+<ParamField path="run_id" type="string" optional>
+A unique identifier of the run you wish to retrieve.
+</ParamField>
+
+## Returns
+
+The [run object](/reference/run-object) matches the specified ID.

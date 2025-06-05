@@ -1,0 +1,185 @@
+---
+title: "Contextual Answers (Document Library)"
+description: "Contextual answers based on your document library using the RAG Engine"
+api: POST https\://api.ai21.com/studio/v1/library/answer
+contentType: application/json
+---
+
+## Overview
+
+The RAG contextual answer model answers questions based on specified files in your RAG Engine document library. If the answer is not within the library, the model will say so. Optionally filter results to documents with matching labels, paths, or IDs. Note that if you specify multiple filtering fields (both labels and paths), only files matching **both** a specified label and path will be queried. Specifying multiple labels, though, matches when any one of the specified labels matches a given document.
+
+You can manage your library either through the [library management endpoints](/reference/manage-library-ref) or through the [playground in the browser](https://studio.ai21.com/overview?source=docs) .
+
+[Read more about the RAG Engine.](/docs/conversational-rag)
+
+<RequestExample>
+
+```python Python SDK
+client = AI21Client(api_key=<<AI21_API_KEY>>)
+
+# For this example, limit search to files with label "hr"
+def query_library(query, labels=None, path=None):
+    response = client.library.answer.create(
+        question=query,
+        path=path,
+        labels=labels
+    )
+    if response.answer_in_context:
+      print(response.answer)
+      print(response.sources)
+    else:
+      print("No answer found")
+
+query_library("How many days can I work from home in the US?",labels=["hr"])
+```
+
+
+```python Python REST
+import requests
+ROOT_URL = "https://api.ai21.com/studio/v1/"
+
+def query_library(question, labels=None, path=None, fileIds=None):
+  url = ROOT_URL + "library/answer"
+  data = {
+    "question": question ,
+     "labels":labels,
+     "path": path,
+     "fileIds": fileIds
+  }
+  print(data)
+  response = requests.post(
+    url=url,
+    headers={"Authorization": f"Bearer {AI21_API_KEY}"},
+    json=data
+  )
+
+  response_json = response.json()
+  if response_json["answerInContext"]:
+    print("Answer: ", response.json()["answer"])
+    print("Sources", response.json()["sources"])
+  else:
+    print("Answer not found")
+
+# Filter files by the label "hr"
+query_library("How many days a week can I work at home in the US?",
+              labels=["hr"])
+```
+
+
+```javascript Response
+Answer:  Employees in the United States can work from home up to two days a week.
+Sources
+[
+  {
+    "fileId":"5143f17d-626d-4a1f-8e66-a4e7e129d238",
+    "name":"hr/US/employee_handbook_us.txt",
+    "highlights":[
+      "US employees can work from home up to two days per week."
+    ],
+    "publicUrl":"None",
+    "labels":[
+      "hr",
+      "policy"
+    ]
+  },
+  {
+    "fileId":"d195f8a9-a8fe-4f4e-96fb-342246d55f53",
+    "name":"/hr/UK/employee_handbook_uk.txt",
+    "highlights":[
+      "UK employees can work from home up to two days per week."
+    ],
+    "publicUrl":"None",
+    "labels":[
+      "hr"
+    ]
+  }
+]
+```
+
+</RequestExample>
+
+
+<ResponseExample>
+
+```json Request Body
+{
+   "question": "During the past decade, what amount did the bank remunerate the Federal Deposit Insurance Corporation?",
+   "labels": ["financial_reports", "banking"]
+}
+```
+
+
+```swift Response
+{
+   "id":"28a6f1a8-31f3-cca4-d71a-6bca2e62d124",
+   "answerInContext":true,
+   "answer":"JPMorgan Chase paid the Federal Deposit Insurance Corporation $11 billion over the past decade.",
+   "sources":[
+      {
+         "document_id":"f8527829-c036-4d3a-9a6e-3169f4db1765",
+         "name":"examples/banking/jpmorgan-annual-report-2021.txt",
+         "highlights":[
+            "I do just want to note that in our case, the silent partner is not so silent.\n\nJPMorgan Chase is a healthy and thriving company, and we always want to give\r\nback and pay our fair share.\n\nWe do — and we want it to be spent well and have\r\nthe greatest impact.\n\nTo give you an idea of where our taxes and fees go: In the\r\nlast 10 years, we paid $42 billion in federal, state and local taxes in the United\r\nStates and $17 billion in taxes outside of the United States.\n\nWe also paid the\r\nFederal Deposit Insurance Corporation $11 billion so that it has the resources\r\nto cover the failure of any major American bank.",
+            "31 Traditional assets include Equity, Fixed Income, Multi-Asset and Liquidity assets under\r\n2 Federal Deposit Insurance Corporation (“FDIC”)\n\n2021 Summary of Deposits survey per S&P                 management; Brokerage, Administration and Custody assets under supervision.",
+            "In addition to banks’ shrinking global role, you\r\n  U.S. debt and equity markets, down from 11%         can see that the number of public companies,\r\n  in 2010.\n\nwhich should have grown substantially over the\r\n• Conversely, U.S. banks’ liquid assets are up        past decade, is remarkably reduced.\n\nInstead, U.S.\r\n  more than 300% to $8.6 trillion, most of which      public companies peaked in 1996 at 7,300 and\r\n  is needed to meet liquidity requirements.\n\nnow total 4,800.\n\nConversely, the number of pri-\r\n                                                      vate U.S. companies backed by private equity\r\n• Banks’ share of mortgage originations has           companies has grown from 1,600 to 10,100 — a\r\n  gone from 91% to 32%.\n\nremarkable increase.",
+            "Before we give an update on the\r\n                                                        million customer accounts — refunding more\r\nstructural shifts taking place, it would be good to\r\n                                                        than $250 million for nearly 2 million consumer\r\naddress the question: How did banks perform\r\n                                                        deposit and lending accounts and offering\r\nduring the recent COVID-19 crisis?",
+            "Although I begin this annual letter to shareholders in a challenging landscape,\r\nI remain proud of what our company and our hundreds of thousands of employ-\r\nees around the world have achieved, collectively and individually.\n\nAs you know,\r\nwe have long championed the essential role of banking in a community — its\r\npotential for bringing people together, for enabling companies and individuals to\r\nreach for their dreams, and for being a source of strength in difficult times.\n\nThroughout these past two challenging years, we never stopped doing all the\r\nthings we should be doing to serve our clients and our communities.\n\nLooking back on the last year and the past two decades — starting from my time\r\nas CEO of Bank One in 2000 — it is clear that our financial discipline, constant\r\ninvestment in innovation and ongoing development of our people are what\r\nenabled us to persevere in our steadfast dedication to help clients, communities\r\nand countries throughout the world."
+         ],
+         "publicUrl":"https://www.jpmorganchase.com/ir/annual-report"
+      }
+   ]
+}
+```
+
+</ResponseExample>
+
+## Body Params
+
+<ParamField body="question" type="string" required>
+The question to be answered based on the content in your document library.  
+Limit: 150 characters
+</ParamField>
+
+<ParamField body="path" type="string" optional>
+Specify a path to restrict answers to documents that match these path, either as a complete or prefix match.  
+That is, specifying `/pets/` would match documents labeled `/pets/` or `/pets/dogs/`.  
+Use to focus the question on specific path in your library.
+</ParamField>
+
+<ParamField body="labels" type="array of strings" optional>
+Specify labels to restrict answers to documents with any of these labels.  
+Labels are exact, case-sensitive matches, no substring matches.  
+If you specify both a path and labels, then only files with *both* a path and a label match will be included.
+</ParamField>
+
+<ParamField body="fileIds" type="array of strings" optional>
+Specify which files should be included in the results.
+</ParamField>
+
+## Response
+
+The casing and styling depends on whether you are using the SDK or looking at the JSON returned by a REST call. For the SDK, convert the fields below to camel case.
+
+<ResponseField name="id" type="string" required>
+A unique identifier assigned by the API to identify the specific request that generated the response.  
+This parameter can be useful for tracking and logging purposes, particularly if multiple requests are being made to the API.
+</ResponseField>
+
+<ResponseField name="answerInContext" type="boolean" required>
+True if an answer could be found, False if an answer could not be found.
+</ResponseField>
+
+<ResponseField name="answer" type="string or null" required>
+The answer to the question based on the provided context, or `null`/`None` if the answer cannot be found.
+</ResponseField>
+
+<ResponseField name="sources" type="array of objects" required>
+An array of objects, where each object represents a source document in which the answer was found.  
+Each source object contains the following:
+
+- `document_id`: A unique identifier of the source document.  
+- `name`: The name of the source document.  
+- `highlights`: An array of strings containing the sections of the source document that are relevant to the answer.  
+- `publicUrl`: A URL pointing to the source document (if available).
+</ResponseField>

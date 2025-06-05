@@ -1,0 +1,196 @@
+---
+mode: "custom"
+---
+import { IntroCard } from '/snippets/card.mdx';
+
+export function openSearch() {
+  document.getElementById('search-bar-entry').click();
+}
+
+<div className="relative w-full flex items-center justify-center" style={{ height: '26rem', overflow: 'hidden'}}>
+  <div
+    id="background-div"
+    className="absolute inset-0 bg-white block ">
+    <div
+      className="absolute inset-0"
+      style={{
+        backgroundImage: 'url(https://mintlify-assets.b-cdn.net/ai21-background.svg)',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}>
+    </div>
+  </div>
+
+  <div style={{ position: 'absolute', textAlign: 'center', padding: '0 1rem' }}>
+    <div
+      className="text-gray-900"
+      style={{
+       fontWeight: '800',
+       fontSize: '2.5rem',
+       fontFamily: 'Polysans',
+       margin: '0',
+       marginTop: '5rem'
+      }}
+    >
+      Welcome to AI21 Labs
+    </div>
+    <p className="mt-4 text-gray-900" style={{ fontSize: '1rem', fontWeight: '400' , maxWidth: '40rem'}}> Start building your AI solution with comprehensive guides and API references for our foundation and task-specific models. </p>
+    <div className="flex items-center justify-center" style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <button
+      type="button"
+      className="hidden w-full lg:flex items-center text-sm leading-6 py-4 pl-4 pr-4 text-gray-500 rounded-full"
+      id="home-search-entry"
+      style={{
+        marginTop: '2rem',
+        maxWidth: '40rem',
+        background: '#FFF',
+        boxShadow: '0px 1px 4px 0px rgba(8, 9, 10, 0.25), 0px 0px 0px 4px rgba(255, 255, 255, 0.20)',
+        cursor: 'pointer',
+        textAlign: 'left',
+      }}
+      onClick={openSearch}
+    >
+      <svg
+        className="h-4 w-4 ml-1.5 flex-none bg-primary hover:bg-gray-600 dark:bg-primary-dark dark:hover:bg-white/70"
+        style={{
+        marginRight: '0.5rem',
+         maskImage:
+           'url("https://mintlify.b-cdn.net/v6.5.1/solid/magnifying-glass.svg")',
+         maskRepeat: 'no-repeat',
+         maskPosition: 'center center',
+        }}
+      />
+      Search or ask...
+    </button>
+    </div>
+    <div style={{ maxWidth: '650px', margin: '0 auto', marginTop: '2rem' }}>
+      <div className="flex flex-wrap items-center justify-center gap-3 mt-3">
+        <IntroCard icon="play" title="Get Started" href="/docs/sdk" />
+        <IntroCard icon="code" title="API Reference" href="/reference/manage-library-ref" />
+        <IntroCard icon="bell" title="Updates" href="/changelog" />
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  style={{marginTop: '2rem', marginBottom: '8rem', maxWidth: '70rem', marginLeft: 'auto',
+  marginRight: 'auto', paddingLeft: '1.25rem',
+  paddingRight: '1.25rem' }}
+>
+
+<div className="flex flex-col w-full " style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+
+</div>
+
+<div className="flex flex-col w-full " style={{ marginTop: '2rem', marginBottom: '1rem' }}>
+  <h2
+    className="text-gray-900 dark:text-gray-200"
+    style={{
+      fontSize: '2rem',
+      fontWeight: '500',
+    }}
+  >
+Terms and Policies
+  </h2>
+
+</div>
+
+<CardGroup>
+  <Card
+    title="Status Page"
+    icon="signal-bars"
+    iconType="solid"
+    href="https://status.ai21.com/?_gl=1*1r4kb9c*_gcl_au*MTgwMDc4MzA5MS4xNzQ1MzA4Mjc0"
+    horizontal
+  />
+  <Card
+    title="Trust Center"
+    icon="shield-check"
+    iconType="solid"
+    href="https://trust.ai21.com/"
+    horizontal
+  />
+  <Card
+    title="Terms of Service"
+    icon="file-shield"
+    iconType="solid"
+    href="https://lp.ai21.com/hubfs/resources/AI21-Models-Terms-of-Service.pdf"
+    horizontal
+  />
+  <Card
+    title="Privacy Policy"
+    icon="lock"
+    iconType="solid"
+    href="https://www.ai21.com/privacy-policy"
+    horizontal
+  />
+</CardGroup>
+
+<div className="flex flex-col w-full " style={{ marginTop: '2rem', marginBottom: '1rem' }}>
+  <h2
+    className="text-gray-900 dark:text-gray-200"
+    style={{
+      fontSize: '2rem',
+      fontWeight: '500',
+    }}
+  >
+Publications
+  </h2>
+  </div>
+
+  <CardGroup cols={2}>
+  <Card
+    title="Blog"
+    icon="pen-field"
+    iconType="solid"
+    href="https://www.ai21.com/blog"
+    horizontal
+  />
+  <Card
+    title="Press"
+    icon="newspaper"
+    iconType="solid"
+    href="https://www.ai21.com/newsroom/"
+    horizontal
+  />
+</CardGroup>
+
+</div>
+
+<button 
+  type="button" 
+  class="flex items-center justify-between w-full max-w-xs rounded-xl h-9 px-3.5 text-sm leading-6 shadow-sm bg-background-light dark:bg-background-dark text-gray-500 dark:text-white/50 ring-1 ring-gray-400/20 hover:ring-gray-600/25 dark:ring-gray-600/30 dark:hover:ring-gray-500/30 focus:outline-primary truncate"
+  id="search-bar-entry"
+>
+  <div class="flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search text-gray-700 hover:text-gray-800 dark:text-gray-400 hover:dark:text-gray-200">
+      <circle cx="11" cy="11" r="8"></circle>
+      <path d="m21 21-4.3-4.3"></path>
+    </svg>
+    <span class="truncate">Search...</span>
+  </div>
+  <span class="text-xs font-semibold">Ctrl K</span>
+</button>
+
+<div class="fixed inset-0 z-40" id="search-modal">
+  <div class="fixed inset-0 bg-background-dark/20 backdrop-blur-sm"></div>
+
+  <div class="fixed inset-0 flex items-start justify-center p-4 sm:p-6 md:p-12 overflow-y-auto z-10">
+    <div class="max-w-[640px] mx-auto w-full transform overflow-hidden border border-gray-200 dark:border-white/10 bg-background-light dark:bg-background-dark shadow-lg rounded-xl">
+      <div class="relative z-10 border-b border-transparent h-14">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="Search..." 
+          autocomplete="off" 
+          class="w-full h-full pl-11 pr-14 rounded-xl border border-gray-200 dark:border-white/10 bg-background-light dark:bg-background-dark outline-none text-gray-950 dark:text-white placeholder:text-gray-400 placeholder:dark:text-white/50 tracking-tight focus:border-slate-950 dark:focus:border-white transition"
+        />
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-5 top-1/2 -translate-y-1/2 text-gray-950 dark:text-white opacity-50 peer-focus:opacity-100">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>

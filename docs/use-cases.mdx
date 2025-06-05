@@ -1,0 +1,22 @@
+---
+title: "Use cases"
+---
+
+### Use Case 1: Generate with requirement
+
+In this example a user is asking Maestro to create a rhyme about a cat.
+The requirements field defines specific conditions or rules that the generated content must meet.
+In this case, there are two requirements:
+
+**Length**: The rhyme must be exactly 5 lines long.
+**Structure**: Each line of the rhyme must start with the letter "A".
+
+```python Python
+payload = {
+    "input": [
+        {"role": "user", "content": "Create a rhyme about a cat"}
+    ],
+    "requirements": [{"name": "length", "description": 'Must be 5 lines', "is_mandatory": True}, {"name": "structure", "description": 'Each line starts with the letter A', "is_mandatory": True}]
+}
+)
+```

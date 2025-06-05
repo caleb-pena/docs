@@ -1,0 +1,55 @@
+{
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "docs/overview",
+        "docs/sdk"
+      ]
+    },
+    {
+      "group": "Foundation Models",
+      "pages": [
+        "docs/jamba-foundation-models",
+        "docs/model-availability-across-platforms",
+        "docs/prompt-engineering",
+        "reference/jamba-1-6-api-ref",
+        "reference/jamba-api-response"
+      ]
+    },
+    {
+      "group": "Conversational RAG",
+      "pages": [
+        "docs/conversational-rag",
+        "reference/manage-library-ref"
+      ]
+    },
+    {
+      "group": "Private AI",
+      "pages": [
+        "docs/self-deployment"
+      ]
+    },
+    {
+      "group": "Usage",
+      "pages": [
+        "docs/managing-your-account",
+        "docs/usage-cost"
+      ]
+    },
+    {
+      "group": "Going to Production",
+      "pages": [
+        "docs/rate-limits"
+      ]
+    },
+    {
+      "group": "AI Ethics & Data Transperancy",
+      "pages": [
+        "docs/responsible-use-1",
+        "docs/safety-research-1",
+        "docs/training-data-1"
+      ]
+    }
+  ]
+}

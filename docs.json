@@ -1,35 +1,90 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "almond",
+  "name": "AI21 Studio",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#f098b5",
+    "light": "#f098b5",
+    "dark": "#212121"
   },
-  "favicon": "/favicon.svg",
+  "appearance": {
+    "default": "light"
+  },
+  "styling": {
+    "codeblocks": "system"
+  },
+  "background": {
+    "decoration": "gradient"
+  },
+  "fonts": {
+    "heading": {
+      "family": "Polysans",
+      "source": "https://www.ai21.com/wp-content/themes/ai21/assets/fonts/polysans/polysans-500.woff2",
+      "format": "woff2"
+    },
+    "body": {
+      "family": "Inter"
+    }
+  },
+  "favicon": "favicon.png",
   "navigation": {
     "tabs": [
+      {
+        "tab": "Home",
+        "pages": ["home"]
+      },
       {
         "tab": "Guides",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Getting Started",
+            "pages": ["docs/overview","docs/sdk"]
+          },
+          {
+            "group": "Foundation Models",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "docs/jamba-foundation-models",
+              "docs/model-availability-across-platforms",
+              "docs/prompt-engineering"
             ]
           },
           {
-            "group": "Essentials",
+            "group": "Conversational RAG",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              "docs/conversational-rag"
+            ]
+          },
+          {
+            "group": "Private AI",
+            "pages": [
+              "docs/self-deployment"
+            ]
+          },
+          {
+            "group": "Usage",
+            "pages": [
+              "docs/managing-your-account",
+              "docs/usage-cost"
+            ]
+          },
+          {
+            "group": "Going to Production",
+            "pages": [
+              "docs/rate-limits"
+            ]
+          },
+          {
+            "group": "AI Ethics & Data Transperancy",
+            "pages": [
+              "docs/responsible-use-1",
+              "docs/safety-research-1",
+              "docs/training-data-1"
+            ]
+          },
+          {
+            "group": "Additional Resources",
+            "pages": [
+              " "
             ]
           }
         ]
@@ -38,38 +93,60 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "Foundation Models",
             "pages": [
-              "api-reference/introduction"
+              "reference/jamba-1-6-api-ref",
+              "reference/jamba-api-response"
             ]
           },
           {
-            "group": "Endpoint Examples",
+            "group": "Conversational RAG",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              {
+                "group": "Library Management Methods",
+                "pages": [
+                  "reference/manage-library-ref",
+                  "reference/manage-library-ref/upload-workspace-files",
+                  "reference/manage-library-ref/list-library-files",
+                  "reference/manage-library-ref/get-workspace-files",
+                  "reference/manage-library-ref/get-file-download-link",
+                  "reference/manage-library-ref/update-file",
+                  "reference/manage-library-ref/delete-file"
+                ]
+              },
+              "reference/conversational-rag-api-ref"
+            ]
+          },
+          {
+            "group": "Maestro",
+            "pages": [
+              "reference/endpoints",
+              "reference/retrieve-run",
+              "reference/run-object"
             ]
           }
         ]
+      },
+      {
+        "tab": "Updates",
+        "pages": ["changelog"]
       }
     ],
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "Status",
+          "href": "https://status.ai21.com/",
+          "icon": "signal"
         },
         {
           "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
+          "href": "https://discord.com/invite/cKzg6GEAyB",
+          "icon": "discord"
         },
         {
           "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
+          "href": "https://www.ai21.com/blog/",
           "icon": "newspaper"
         }
       ]
@@ -77,26 +154,21 @@
   },
   "logo": {
     "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "dark": "/logo/dark.svg",
+    "href": "https://www.ai21.com/"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Get a Demo",
+      "href": "https://www.ai21.com/talk-to-us/"
     }
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "linkedin": "https://www.linkedin.com/company/ai21/",
+      "x": "https://twitter.com/AI21Labs",
+      "discord": "https://discord.com/invite/cKzg6GEAyB"
     }
   }
 }
